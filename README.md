@@ -57,7 +57,7 @@ mkdir -p ~/bin/
 ```
 ### Add Executables Directory to $PATH
 Add the following commands to your ~/.profile file to make these changes permanent.
-__Note: Some systems have already added this to directory to PATH once the directory is made__
+__Note: Some systems have already added this directory to PATH once the directory is made__
 
 Navigate to `~/.profile` and edit with `vim` to edit `$PATH` variable
 ```
