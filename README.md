@@ -89,7 +89,7 @@ cd FastQC/
 chmod 755 fastqc
 ```
 ### SAMtools
-Download unpack, and configure 
+Download, unpack, and configure 
 ```
 cd ~/rnaseq/
 
