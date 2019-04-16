@@ -18,7 +18,7 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 ### Software Necessary
 
 * [NuttyLogic/Demultiplexer](https://github.com/NuttyLogic/Demultiplexer)
-	__requires python > 3.4__
+	- __requires python > 3.4__
 	- Download from GitHub repository, extract, and run
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 	- Quality Control 
@@ -27,7 +27,6 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 * [SAMtools](http://www.htslib.org/)
 * [StringTie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual)
 	- Accomplishes steps 2 and 3
-		-jkj
 * [gffcompare](http://ccb.jhu.edu/software/stringtie/gff.shtml#gffcompare)
 * [R](https://www.r-project.org)
 	- Data visualization. Required to use Ballgown
