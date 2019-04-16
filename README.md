@@ -43,7 +43,7 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 
 # Software Installation and Setup
 
-__NOTE:__ All instructions are under the assumption that work is being done on a Linux (Ubuntu) machine and commands will either be run from a __Unx shell prompt__ from a terminal window or from the R environment. 
+__NOTE:__ All instructions are under the assumption that work is being done on a Linux (Ubuntu) machine and commands will either be run from a __Unix shell prompt__ from a terminal window or from the R environment. 
 
 To be able to access exec commands from any location in the terminal without having to specify paths, create two directories in which one stores downloaded and installed software directories and the other contains copies of the executables added to your `$PATH` variable
 
