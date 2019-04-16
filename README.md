@@ -13,11 +13,11 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 1. Alignment of reads to a known reference genome
 2. Assembly of alignments into full-length transcripts
 3. Quantification of gene and transcript expression levels. Export in a Ballgown
-4. Calculation of differential gene and transcript expression across differnt experimental conditions
+4. Calculation of differential gene and transcript expression across different experimental conditions
 
 ### Software Necessary
 
-* [NuttyLogic/Demultiplexer](https://github.com/NuttyLogic/Demultiplexer)
+* [Demultiplexer](https://github.com/NuttyLogic/Demultiplexer)
 	- __requires python > 3.4__
 	- Download from GitHub repository, extract, and run
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
