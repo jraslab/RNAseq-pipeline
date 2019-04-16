@@ -12,8 +12,8 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 
 1. Alignment of reads to a known reference genome
 2. Assembly of alignments into full-length transcripts
-3. Quantification of gene and transcript expression levels. Export in a Ballgown
-4. Calculation of differential gene and transcript expression across differnt experimental conditions
+3. Quantification of gene and transcript expression levels. Export in a Ballgown readable format
+4. Calculation of differential gene and transcript expression across different experimental conditions
 
 ### Software Necessary
 
@@ -57,7 +57,7 @@ mkdir -p ~/bin/
 ```
 ### Add Executables Directory to $PATH
 Add the following commands to your ~/.profile file to make these changes permanent.
-__Note: Some systems have already added this to directory to PATH once the directory is made__
+__Note: Some systems have already added this directory to PATH once the directory is made__
 
 Navigate to `~/.profile` and edit with `vim` to edit `$PATH` variable
 ```
