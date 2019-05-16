@@ -22,6 +22,8 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 	- Download from GitHub repository, extract, and run
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 	- Quality Control 
+* [MultiQC](https://multiqc.info)
+	- Quality Control sample summary report
 * [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
 	- Accomplishes step 1
 * [SAMtools](http://www.htslib.org/)
@@ -39,7 +41,7 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 		- dplyr
 		- ggpubr
 		
-
+***
 
 # Software Installation and Setup
 
@@ -181,6 +183,100 @@ Or, from CRAN:
 ```
 install.packages("ggpubr")
 ```
+
+***
+
+# STEP 1: Alignment to a Known Reference Genome
+
+**Initial Quality Control measures should have been taken to filter out low-quality sample sets.**
+
+This RNAseq pipeline starts with alignment of the obtained RNA reads to a reference genome with **HISAT2**.
+
+We will also convert the outputed SAM files to BAM files using **SAMtools**.
+
+## Software Used:
+1. HISAT2
+2. SAMtools
+
+### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [Samtools](http://www.htslib.org/doc/samtools.html) manuals.
+
+
+## Building an Index for Alignment
+
+Some organisms have prebuilt indexes available on the HISAT2 website, while others require you to build an index yourself. If a prebuilt index is available, it is generally encouraged to utilize the index rather than building your own, as you will result in an identical index. 
+
+Additionally, building an index can require significantly more memory than the actual alignment step. If you wish to use the `--ss` or `--exon` option to build an index that considers known splice-site and exon information from the genome annotation file (`.gtf` format), it can require about 160 GB of RAM for the whole human genome.
+
+Excluding these options, you can build an index for alignment on a regular 8GB desktop computer with the following command. 
+
+```
+hisat2-build [options] reference/genome/file.fa ht2_base
+```
+
+Here, `ht2_base` is the base name for the .ht2 output files. For example, if ht2_base = chr19, the index files would be named chr19.1.ht2, chr19.2.ht2, ...
+
+FASTA reference genome files can be obtained from many sources. A popular option is to download the reference genome for your organism of choice from the [Ensembl](https://www.ensembl.org/info/about/mirrors.html) website (Choose your preferred mirror site at this link). [UCSC](http://genome.ucsc.edu/cgi-bin/hgGateway) and [NCBI](http://www.ncbi.nlm.nih.gov/sites/genome) are additional options.
+
+You can use the following command to extract information about the built index
+
+```
+hisat2-inspect [options] ht2_base
+```
+The `ht2_base` will be the name of the files HISAT2 will search for (first in the current directory, then the directory specified in the `HISAT2_INDEXES` environmental variable. 
+
+## Alignment with Hisat2
+
+The general usage of hisat2 is as follows:
+
+```
+hisat2 [options] -x </index/base/name> -S </file/to/write/SAM/alignments/to> {-1 <r1> with -2 <r2>, -U <r>, or --sra-acc <SRA accession number>}
+```
+The inputs in the { } are used to specify the types of read files used. For example, `-1` is used with `-2` for paired-read analysis while `-U` is used for inputing unpaired read files.
+
+The default file format for reads is `FASTQ`; options can be used to specify the format used if necessary.
+
+**_Note: Each sample / experimental condition should be aligned with its own, separate hisat2 command_**
+
+**Options that are particularly useful**
+
+* `-p/--threads NTHREADS` : Specifies the number of parallel search threads to launch
+
+* `--dta/--downstream-transcriptome-assembly` : The output alignments are tailored for transcript assemblers (Like StringTie!) Using this option can help improve computation and memory usage
+
+* `--known-splicesite-infile <path>` : Provides a list of known splice sites to HISAT2. This can be used if the `--ss` option was not used in building the index. **_Although it can be useful in the alignment process, it is preferable to use indexes built with annotated information._** This is helpful with if that option is not feasible
+
+* `--summary-file <file>` : Write the alignment summary to this file. Alignment summary will still print out in the terminal, but will also be written to this file for future reference
+
+## Sorting and Converting SAM files to BAM files
+
+After the RNA reads have been aligned to the refrence genome, it is necessary to sort by chromosomal coordinates and convert the SAM alignment files to BAM format. BAM files are the binary equivalent of the human-readable SAM files
+
+The following command will sort and convert the files:
+
+```
+samtools sort [options] -o /output/file1.bam /input/file1.sam
+```
+**Options that are particularly useful**
+
+* `-o <out.bam>` : In the above command, `-o` is technically an option, not a required input as `samtools sort` can be used just to sort the input file and write the sorted output to standard output. This option's default output format is `.bam`, but can be specified with `-O <FORMAT>` if wanted
+
+* `-@ <INT>` : Set the number of threads used for sorting and converting
+
+### samtools view
+
+This command can be used to print all allignments from the input file to standard output. Using the option `-c` will instead count all the alignments and print the number to standard output. 
+
+This can be used to double check that the conversion from SAM to BAM was executed correctly, as the number of alignments should be conserved between the two file types.
+
+```
+samtools view [options] -c /input/file1.sam
+
+samtools view [options] -c /input/file1.bam
+```
+These two commands should return the same number.
+
+
+***
 
 # Amazon Web Services (AWS) Setup
 
