@@ -22,6 +22,8 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 	- Download from GitHub repository, extract, and run
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 	- Quality Control 
+* [MultiQC](https://multiqc.info)
+	- Quality Control sample summary report
 * [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
 	- Accomplishes step 1
 * [SAMtools](http://www.htslib.org/)
@@ -39,7 +41,6 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 		- dplyr
 		- ggpubr
 		
-
 
 # Software Installation and Setup
 
