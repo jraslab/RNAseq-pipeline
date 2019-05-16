@@ -41,6 +41,7 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 		- dplyr
 		- ggpubr
 		
+***
 
 # Software Installation and Setup
 
@@ -183,15 +184,20 @@ Or, from CRAN:
 install.packages("ggpubr")
 ```
 
+***
+
 # Alignment to a Known Reference Genome
 
+This RNAseq pipeline starts with alignment of the obtained RNA reads to a reference genome with `HISAT2` **Initial Quality Control measures should have been taken to filter out low-quality sample sets.**
+
+We will also convert the outputed SAM files to BAM files using `SAMtools`
+
 ## Software Used:
-1. Hisat2
-2. Samtools
+1. HISAT2
+2. SAMtools
 
 ### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [Samtools](http://www.htslib.org/doc/samtools.html) manuals.
 
-*** 
 
 ## Building an Index for Alignment
 
@@ -227,21 +233,48 @@ The inputs in the { } are used to specify the types of read files used. For exam
 
 The default file format for reads is `FASTQ`; options can be used to specify the format used if necessary.
 
+**_Note: Each sample / experimental condition should be aligned with its own, separate hisat2 command_**
+
 **Options that are particularly useful**
 
 * `-p/--threads NTHREADS` : Specifies the number of parallel search threads to launch
 
 * `--dta/--downstream-transcriptome-assembly` : The output alignments are tailored for transcript assemblers (Like StringTie!) Using this option can help improve computation and memory usage
 
-* `--known-splicesite-infile <path>` : Provides a list of known splice sites to HISAT2. This can be used if the `--ss` option was not used in building the index. _Although it can be useful in the alignment process, it is preferable to use indexes built with annotated information._ This is helpful with if that option is not feasible
+* `--known-splicesite-infile <path>` : Provides a list of known splice sites to HISAT2. This can be used if the `--ss` option was not used in building the index. **_Although it can be useful in the alignment process, it is preferable to use indexes built with annotated information._** This is helpful with if that option is not feasible
 
 * `--summary-file <file>` : Write the alignment summary to this file. Alignment summary will still print out in the terminal, but will also be written to this file for future reference
 
-***
-
 ## Sorting and Converting SAM files to BAM files
 
+After the RNA reads have been aligned to the refrence genome, it is necessary to sort by chromosomal coordinates and convert the SAM alignment files to BAM format. BAM files are the binary equivalent of the human-readable SAM files
 
+The following command will sort and convert the files:
+
+```
+samtools sort [options] -o /output/file1.bam /input/file1.sam
+```
+**Options that are particularly useful**
+
+* `-o <out.bam>` : In the above command, `-o` is technically an option, not a required input as `samtools sort` can be used just to sort the input file and write the sorted output to standard output. This option's default output format is `.bam`, but can be specified with `-O <FORMAT>` if wanted
+
+* `-@ <INT>` : Set the number of threads used for sorting and converting
+
+### samtools view
+
+This command can be used to print all allignments from the input file to standard output. Using the option `-c` will instead count all the alignments and print the number to standard output. 
+
+This can be used to double check that the conversion from SAM to BAM was executed correctly, as the number of alignments should be conserved between the two file types.
+
+```
+samtools view [options] -c /input/file1.sam
+
+samtools view [options] -c /input/file1.bam
+```
+These two commands should return the same number.
+
+
+***
 
 # Amazon Web Services (AWS) Setup
 
