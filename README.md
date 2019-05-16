@@ -183,6 +183,66 @@ Or, from CRAN:
 install.packages("ggpubr")
 ```
 
+# Alignment to a Known Reference Genome
+
+## Software Used:
+1. Hisat2
+2. Samtools
+
+### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [Samtools](http://www.htslib.org/doc/samtools.html) manuals.
+
+*** 
+
+## Building an Index for Alignment
+
+Some organisms have prebuilt indexes available on the HISAT2 website, while others require you to build an index yourself. If a prebuilt index is available, it is generally encouraged to utilize the index rather than building your own, as you will result in an identical index. 
+
+Additionally, building an index can require significantly more memory than the actual alignment step. If you wish to use the `--ss` or `--exon` option to build an index that considers known splice-site and exon information from the genome annotation file (`.gtf` format), it can require about 160 GB of RAM for the whole human genome.
+
+Excluding these options, you can build an index for alignment on a regular 8GB desktop computer with the following command. 
+
+```
+hisat2-build [options] reference/genome/file.fa ht2_base
+```
+
+Here, `ht2_base` is the base name for the .ht2 output files. For example, if ht2_base = chr19, the index files would be named chr19.1.ht2, chr19.2.ht2, ...
+
+FASTA reference genome files can be obtained from many sources. A popular option is to download the reference genome for your organism of choice from the [Ensembl](https://www.ensembl.org/info/about/mirrors.html) website (Choose your preferred mirror site at this link). [UCSC](http://genome.ucsc.edu/cgi-bin/hgGateway) and [NCBI](http://www.ncbi.nlm.nih.gov/sites/genome) are additional options.
+
+You can use the following command to extract information about the built index
+
+```
+hisat2-inspect [options] ht2_base
+```
+The `ht2_base` will be the name of the files HISAT2 will search for (first in the current directory, then the directory specified in the `HISAT2_INDEXES` environmental variable. 
+
+## Alignment with Hisat2
+
+The general usage of hisat2 is as follows:
+
+```
+hisat2 [options] -x </index/base/name> -S </file/to/write/SAM/alignments/to> {-1 <r1> with -2 <r2>, -U <r>, or --sra-acc <SRA accession number>}
+```
+The inputs in the { } are used to specify the types of read files used. For example, `-1` is used with `-2` for paired-read analysis while `-U` is used for inputing unpaired read files.
+
+The default file format for reads is `FASTQ`; options can be used to specify the format used if necessary.
+
+**Options that are particularly useful**
+
+* `-p/--threads NTHREADS` : Specifies the number of parallel search threads to launch
+
+* `--dta/--downstream-transcriptome-assembly` : The output alignments are tailored for transcript assemblers (Like StringTie!) Using this option can help improve computation and memory usage
+
+* `--known-splicesite-infile <path>` : Provides a list of known splice sites to HISAT2. This can be used if the `--ss` option was not used in building the index. _Although it can be useful in the alignment process, it is preferable to use indexes built with annotated information._ This is helpful with if that option is not feasible
+
+* `--summary-file <file>` : Write the alignment summary to this file. Alignment summary will still print out in the terminal, but will also be written to this file for future reference
+
+***
+
+## Sorting and Converting SAM files to BAM files
+
+
+
 # Amazon Web Services (AWS) Setup
 
 
