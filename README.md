@@ -264,7 +264,9 @@ samtools sort [options] -o /output/file1.bam /input/file1.sam
 
 ### samtools view
 
-This command can be used to print all allignments from the input file to standard output. Using the option `-c` will instead count all the alignments and print the number to standard output. 
+This command can be used to print all allignments from the input file to standard output. 
+
+Using the `-c` option will instead count all the alignments and print the number to standard output. 
 
 This can be used to double check that the conversion from SAM to BAM was executed correctly, as the number of alignments should be conserved between the two file types.
 
@@ -275,6 +277,15 @@ samtools view [options] -c /input/file1.bam
 ```
 These two commands should return the same number.
 
+`samtools view` can also be used to convert SAM files into an unsorted BAM output with the following command:
+
+```
+samtools view -bS file1.sam > file1.bam
+```
+**Options that are particularly useful**
+
+* `-@ <INT>` : Set the number of threads used for BAM compression
+* `-S` : This option may be uneccesary depending on the version of SAMtools being used; refer to the SAMtools manual for more information
 
 ***
 
