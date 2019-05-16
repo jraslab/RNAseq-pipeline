@@ -266,7 +266,7 @@ samtools sort [options] -o /output/file1.bam /input/file1.sam
 
 This command can be used to print all allignments from the input file to standard output. 
 
-Using the option `-c` will instead count all the alignments and print the number to standard output. 
+Using the `-c` option will instead count all the alignments and print the number to standard output. 
 
 This can be used to double check that the conversion from SAM to BAM was executed correctly, as the number of alignments should be conserved between the two file types.
 
