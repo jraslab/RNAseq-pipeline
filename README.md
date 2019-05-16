@@ -188,9 +188,11 @@ install.packages("ggpubr")
 
 # Alignment to a Known Reference Genome
 
-This RNAseq pipeline starts with alignment of the obtained RNA reads to a reference genome with `HISAT2` **Initial Quality Control measures should have been taken to filter out low-quality sample sets.**
+**Initial Quality Control measures should have been taken to filter out low-quality sample sets.**
 
-We will also convert the outputed SAM files to BAM files using `SAMtools`
+This RNAseq pipeline starts with alignment of the obtained RNA reads to a reference genome with **HISAT2**.
+
+We will also convert the outputed SAM files to BAM files using **SAMtools**.
 
 ## Software Used:
 1. HISAT2
