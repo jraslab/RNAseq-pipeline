@@ -186,7 +186,7 @@ install.packages("ggpubr")
 
 ***
 
-# Alignment to a Known Reference Genome
+# STEP 1: Alignment to a Known Reference Genome
 
 **Initial Quality Control measures should have been taken to filter out low-quality sample sets.**
 
