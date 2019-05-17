@@ -259,7 +259,6 @@ samtools sort [options] -o /output/file1.bam /input/file1.sam
 **Options that are particularly useful**
 
 * `-o <out.bam>` : In the above command, `-o` is technically an option, not a required input as `samtools sort` can be used just to sort the input file and write the sorted output to standard output. This option's default output format is `.bam`, but can be specified with `-O <FORMAT>` if wanted
-
 * `-@ <INT>` : Set the number of threads used for sorting and converting
 
 ### samtools view
@@ -286,6 +285,50 @@ samtools view -bS file1.sam > file1.bam
 
 * `-@ <INT>` : Set the number of threads used for BAM compression
 * `-S` : This option may be uneccesary depending on the version of SAMtools being used; refer to the SAMtools manual for more information
+
+***
+
+# STEP 2: Assembly of Alignments into Full-Length Transcripts
+
+**SAM alignment output from HISAT2 should have already been sorted and converted to BAM with **samtools**.**
+
+The next step of the pipeline involves the assembly of the read alignments outputed by HISAT2 into full length transcripts using **StringTie**.
+
+## Software Used:
+1. StringTie
+
+### Any additional information and option descriptions can be found in the [StringTie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual) manual.
+
+## Workflow Options:
+
+Because StringTie has the ability to discover and assembly novel transcripts not present in the refrence annotation, there are two workflow options that are primarily followed when using StringTie. The difference lies in the goal of the RNAseq project and whether novel isoforms are of interest:
+
+### Option 1:
+
+1. Run StringTie for each sample BAM file. Provide the genome annotation file if available with the `-G` option
+2. Run StringTie with the `--merge` function to merge all sample transcripts generated into a set of _non-redundant_ transcripts
+3. Run StringTie with the `-e` and `-B/-b` option to estimate transcript abundances and output data into a _Ballgown readable format_ for further downstream analysis. Instead of specifing the Reference Genome Annotation file to option `-G`, use the merged transcripts `.gtf` file generated from the `stringtie --merge` step
+4. The output can now be read in by Ballgown for generating plots, differential expression analysis, etc.
+
+### Option 2:
+
+This workflow is a simplified, quicker version in which there is no interest in novel isoforms. This workflow **does not** individually assembly each sample's transcript and then merge them. This workflow estimates andanalyzes expression based on only the transcripts that are found in the reference genome annotation.
+
+1. Run StringTie with the `-e`, `-B/-b` and `-G` option for each sample BAM file. The `-G` option will take the Reference Genome Annotation `.gtf` file, **NOT** the merged transcript file. ( You would not have generated this anyway with this workflow ).
+2. The output can now be read in by Ballgown for generating plots, differential expression analysis, etc.
+
+## General Usage:
+
+```
+stringtie [options] aligned_reads.bam
+```
+**Options that are particularly useful**
+
+* `-G <ref_anno_file>` : Specifes the reference annotation file (`GTF` or `GFF3` format) used to guide the transcript assembly. Required by options `-e, -B/-b, -C`
+* `-o </path/out.gtf>` : Specifies the name of the output `GTF` file. Can be inputted as a path, directories will be created if needed
+* `-e` : Limits transcripts estimated and outputted to only the ones matching the annotation file passed to option `-G`
+* `-B` and `-b <path>` : Switches output to be _Ballgown_ input tables. `-b <path>` will output the data into the specified bath to directory instead of the directory specified in the `-o` option
+* `-p <int>` : Specifies the number of processing threads to use for transcipt assembly
 
 ***
 
