@@ -233,6 +233,8 @@ hisat2 [options] -x </index/base/name> -S </file/to/write/SAM/alignments/to> {-1
 ```
 The inputs in the { } are used to specify the types of read files used. For example, `-1` is used with `-2` for paired-read analysis while `-U` is used for inputing unpaired read files.
 
+The `-x` option searches for the basename for the index files to be used. Can be specified as a path. Do **not** include the `.x.ht2` extention in the base name.
+
 The default file format for reads is `FASTQ`; options can be used to specify the format used if necessary.
 
 **_Note: Each sample / experimental condition should be aligned with its own, separate hisat2 command_**
