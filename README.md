@@ -292,7 +292,7 @@ samtools view -bS file1.sam > file1.bam
 
 # STEP 2: Assembly of Alignments into Full-Length Transcripts
 
-**SAM alignment output from HISAT2 should have already been sorted and converted to BAM with **samtools**.**
+**SAM alignment output from HISAT2 should have already been sorted and converted to BAM with SAMtools.**
 
 The next step of the pipeline involves the assembly of the read alignments outputed by HISAT2 into full length transcripts using **StringTie**.
 
