@@ -185,6 +185,16 @@ Or, from CRAN:
 ```
 install.packages("ggpubr")
 ```
+# STEP 0: Quality Control
+
+**This step should be completed prior to alignment steps**
+
+The primary goal of quality control is to ensure the samples moving forward for downstream analysis are of substantial quality. 
+
+## Software Used:
+1. FastQC
+2. MultiQC
+
 
 ***
 
@@ -200,7 +210,7 @@ We will also convert the outputed SAM files to BAM files using **SAMtools**.
 1. HISAT2
 2. SAMtools
 
-### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [Samtools](http://www.htslib.org/doc/samtools.html) manuals.
+### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [SAMtools](http://www.htslib.org/doc/samtools.html) manuals.
 
 
 ## Building an Index for Alignment
@@ -336,6 +346,8 @@ stringtie [options] aligned_reads.bam
 * `-p <int>` : Specifies the number of processing threads to use for transcript assembly
 
 ***
+
+
 
 # Amazon Web Services (AWS) Setup
 
