@@ -1,21 +1,23 @@
 # Introduction
-Software and methods for a bioinformatics pipeline
 
-This repository follows the protocol outlined in [Nature Journal](https://www.nature.com/articles/nprot.2016.095) with additional preprocessing and analysis steps
+This repository follows the protocol outlined in [Nature Journal](https://www.nature.com/articles/nprot.2016.095) with additional preprocessing and analysis steps. The ultimate goal of this pipeline is to process raw RNAseq data and compute differential expression analysis between experimental conditions.
 
-### Quality Control
+Within this repository, you will find software and methods for completing the above task.
 
-* Demultiplex Sequencing data to group by sample
-* Perform quality control check on raw RNA read data
+## Overview of Steps
+### Quality Control:
 
-### Main RNAseq Pipeline Steps
+1. Demultiplex sequencing data to group by sample 
+2. Perform quality control check on raw RNA read data
+
+### Main RNAseq Pipeline Steps:
 
 1. Alignment of reads to a known reference genome
 2. Assembly of alignments into full-length transcripts
 3. Quantification of gene and transcript expression levels. Export in a Ballgown readable format
 4. Calculation of differential gene and transcript expression across different experimental conditions
 
-### Software Necessary
+## Software Necessary
 
 * [Demultiplexer](https://github.com/NuttyLogic/Demultiplexer)
 	- __requires python > 3.4__
