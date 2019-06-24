@@ -16,6 +16,7 @@ Within this repository, you will find software and methods for completing the ab
 2. Assembly of alignments into full-length transcripts
 3. Quantification of gene and transcript expression levels. Export in a Ballgown readable format
 4. Calculation of differential gene and transcript expression across different experimental conditions
+5. Visualization of Data
 
 ## Software Necessary
 
@@ -25,6 +26,7 @@ Within this repository, you will find software and methods for completing the ab
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 	- Quality Control 
 * [MultiQC](https://multiqc.info)
+	-__requires python__
 	- Quality Control sample summary report
 * [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
 	- Accomplishes step 1
@@ -42,6 +44,7 @@ Within this repository, you will find software and methods for completing the ab
 		- genefilter
 		- dplyr
 		- ggpubr
+		- corrplot
 		
 ***
 
@@ -83,6 +86,9 @@ __Note:__ commands belown may not install the latest software. The links provide
 Download from GitHub linked above
 
 ### FastQC
+
+**_Note: FastQC requires a Java Runtime Environment (JRE) to run. On OSX, a Java Development Kit (JDK) is also required._**
+
 ```
 cd ~/rnaseq/
 
@@ -91,6 +97,23 @@ unzip fastqc_v0.11.8.zip
 
 cd FastQC/
 chmod 755 fastqc
+```
+To run FastQC from anywhere, make a link to the original wrapper script:
+```
+sudo ln -s /path/to/FastQC/fastqc $HOME/bin/fastqc
+```
+The path to the wrapper script should be `/rnaseq/FastQC/fastqc` if placed in directory as shown above.
+
+### MultiQC
+It is easiest to install MultiQC with pip:
+
+```
+pip install multiqc
+```
+To update:
+
+```
+pip --update multiqc
 ```
 ### SAMtools
 Download, unpack, and configure 
@@ -185,6 +208,12 @@ Or, from CRAN:
 ```
 install.packages("ggpubr")
 ```
+
+#### corrplot
+```
+install.packages("corrplot")
+```
+
 # STEP 0: Quality Control
 
 **This step should be completed prior to alignment steps**
@@ -195,6 +224,45 @@ The primary goal of quality control is to ensure the samples moving forward for 
 1. FastQC
 2. MultiQC
 
+### Any additional information and option descriptions can be found on the [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info) websites.
+
+## FastQC Setup
+
+**_Note: FastQC requires a Java Runtime Environment (JRE) to run. On OSX, a Java Development Kit (JDK) is also required._**
+
+This pipeline runs FastQC in the **non-interactive** mode. Running just `fastqc` will try to open the graphical user interface.
+
+To run FastQC on multiple files, simply list the names of the files and indicate the output directory
+
+```
+fastqc -o /path/to/output/directory file1.fastq file2.fastq file3.fastq ...
+```
+**Options that are particularly useful**
+
+* `-o/--outdir </path/to/output/directory>` : Specifies the directory to write HTML output files to
+* `-f/--format` : Specifies the file type. Valid formats are bam,sam,bam_mapped,sam_mapped and fastq. There is normally file format detection, but you can specify to be safe.
+
+Running `fastqc --help` will give a full list of availible options
+
+There is also a video tutorial available [here](https://www.youtube.com/watch?v=bz93ReOv87Y).
+
+**Detailed descriptions of analysis modules results can be found [here](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/).**
+
+## MultiQC
+
+To run MultiQC, simply navigate to the desired analysis directory and run:
+
+```
+multiqc .
+```
+You can also specify a specific directory or directories:
+```
+multiqc /path/to/directory1/ /path/to/directory2/
+```
+
+**Option that is particularly useful**
+
+* `-x/--ignore <string>` : Specifies the string used to match to files, paths, and directories to ignore. This can be specified multiple times
 
 ***
 
@@ -227,7 +295,7 @@ hisat2-build [options] reference/genome/file.fa ht2_base
 
 Here, `ht2_base` is the base name for the .ht2 output files. For example, if ht2_base = chr19, the index files would be named chr19.1.ht2, chr19.2.ht2, ...
 
-FASTA reference genome files can be obtained from many sources. A popular option is to download the reference genome for your organism of choice from the [Ensembl](https://www.ensembl.org/info/about/mirrors.html) website (Choose your preferred mirror site at this link). [UCSC](http://genome.ucsc.edu/cgi-bin/hgGateway) and [NCBI](http://www.ncbi.nlm.nih.gov/sites/genome) are additional options.
+FASTA reference genome files can be obtained from many sources. A popular option is to download the reference genome for your organism of choice from the [Ensembl](https://www.ensembl.org/info/about/mirrors.html) website (Choose your preferred mirror site from that link). [UCSC](http://genome.ucsc.edu/cgi-bin/hgGateway) and [NCBI](http://www.ncbi.nlm.nih.gov/sites/genome) are additional options.
 
 You can use the following command to extract information about the built index
 
@@ -346,6 +414,14 @@ stringtie [options] aligned_reads.bam
 * `-p <int>` : Specifies the number of processing threads to use for transcript assembly
 
 ***
+
+# STEP 4: Calculation of Differential Gene / Transcript Expression Across Different Experimental Conditions
+
+## Software Used:
+1. R
+2. Ballgown
+
+
 
 
 
