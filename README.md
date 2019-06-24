@@ -80,7 +80,8 @@ Hit the "esc" key to quit "__INSERT__" mode. Type `:wq` to write to `~/.profile`
 
 ## Download and Install Software
 The following instructions will install the software listed above and copy the necessary executables to the Executables folder
-__Note:__ commands belown may not install the latest software. The links provided above can be used to verify and download the latest versions
+
+__Note:__ commands below may not install the latest software. The links provided above can be used to verify and download the latest versions
 
 ### Demultiplexer
 Download from GitHub linked above
@@ -102,7 +103,7 @@ To run FastQC from anywhere, make a link to the original wrapper script:
 ```
 sudo ln -s /path/to/FastQC/fastqc $HOME/bin/fastqc
 ```
-The path to the wrapper script should be `/rnaseq/FastQC/fastqc` if placed in directory as shown above.
+The path to the wrapper script should be `/rnaseq/FastQC/fastqc` , if placed in the directory as shown above.
 
 ### MultiQC
 
@@ -241,9 +242,9 @@ fastqc -o /path/to/output/directory file1.fastq file2.fastq file3.fastq ...
 **Options that are particularly useful**
 
 * `-o/--outdir </path/to/output/directory>` : Specifies the directory to write HTML output files to
-* `-f/--format` : Specifies the file type. Valid formats are bam,sam,bam_mapped,sam_mapped and fastq. There is normally file format detection, but you can specify to be safe.
+* `-f/--format` : Specifies the file type. Valid formats are bam, sam, bam_mapped, sam_mapped and fastq. There is normally file format detection, but you can specify to be safe.
 
-Running `fastqc --help` will give a full list of availible options
+Running `fastqc --help` will give a full list of available options
 
 There is also a video tutorial available [here](https://www.youtube.com/watch?v=bz93ReOv87Y).
 
