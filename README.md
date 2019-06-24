@@ -26,7 +26,7 @@ Within this repository, you will find software and methods for completing the ab
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 	- Quality Control 
 * [MultiQC](https://multiqc.info)
-	-__requires python__
+	- __requires python__
 	- Quality Control sample summary report
 * [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
 	- Accomplishes step 1
@@ -45,7 +45,6 @@ Within this repository, you will find software and methods for completing the ab
 		- dplyr
 		- ggpubr
 		- corrplot
-		
 ***
 
 # Software Installation and Setup
@@ -105,13 +104,14 @@ sudo ln -s /path/to/FastQC/fastqc $HOME/bin/fastqc
 The path to the wrapper script should be `/rnaseq/FastQC/fastqc` if placed in directory as shown above.
 
 ### MultiQC
+
 It is easiest to install MultiQC with pip:
 
 ```
 pip install multiqc
 ```
-To update:
 
+To update:
 ```
 pip --update multiqc
 ```
@@ -262,7 +262,7 @@ multiqc /path/to/directory1/ /path/to/directory2/
 
 **Option that is particularly useful**
 
-* `-x/--ignore <string>` : Specifies the string used to match to files, paths, and directories to ignore. This can be specified multiple times
+* `-x/--ignore <string>` : Specifies the string used to match to files, paths, and directories to ignore. This can be specified multiple times.
 
 ***
 
@@ -280,7 +280,6 @@ We will also convert the outputed SAM files to BAM files using **SAMtools**.
 
 ### Any additional information and option descriptions can be found in the [HISAT2](http://ccb.jhu.edu/software/hisat2/manual.shtml) and [SAMtools](http://www.htslib.org/doc/samtools.html) manuals.
 
-
 ## Building an Index for Alignment
 
 Some organisms have prebuilt indexes available on the HISAT2 website, while others require you to build an index yourself. If a prebuilt index is available, it is generally encouraged to utilize the index rather than building your own, as you will result in an identical index. 
@@ -292,7 +291,6 @@ Excluding these options, you can build an index for alignment on a regular 8GB d
 ```
 hisat2-build [options] reference/genome/file.fa ht2_base
 ```
-
 Here, `ht2_base` is the base name for the .ht2 output files. For example, if ht2_base = chr19, the index files would be named chr19.1.ht2, chr19.2.ht2, ...
 
 FASTA reference genome files can be obtained from many sources. A popular option is to download the reference genome for your organism of choice from the [Ensembl](https://www.ensembl.org/info/about/mirrors.html) website (Choose your preferred mirror site from that link). [UCSC](http://genome.ucsc.edu/cgi-bin/hgGateway) and [NCBI](http://www.ncbi.nlm.nih.gov/sites/genome) are additional options.
@@ -421,6 +419,9 @@ stringtie [options] aligned_reads.bam
 1. R
 2. Ballgown
 
+
+***
+# STEP 5: Visualization of Data
 
 
 
