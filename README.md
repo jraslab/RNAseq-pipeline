@@ -24,6 +24,7 @@ Within this repository, you will find software and methods for completing the ab
 	- __requires python > 3.4__
 	- Download from GitHub repository, extract, and run
 * [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+	- __requires Java__
 	- Quality Control 
 * [MultiQC](https://multiqc.info)
 	- __requires python__
