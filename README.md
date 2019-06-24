@@ -275,7 +275,7 @@ samtools sort [options] -o /output/file1.bam /input/file1.sam
 * `-o <out.bam>` : In the above command, `-o` is technically an option, not a required input as `samtools sort` can be used just to sort the input file and write the sorted output to standard output. This option's default output format is `.bam`, but can be specified with `-O <FORMAT>` if wanted
 * `-@ <INT>` : Set the number of threads used for sorting and converting
 
-### samtools view
+### `samtools view`
 
 This command can be used to print all allignments from the input file to standard output. 
 
@@ -302,7 +302,7 @@ samtools view -bS file1.sam > file1.bam
 
 ***
 
-# STEP 2: Assembly of Alignments into Full-Length Transcripts
+# STEP 2 & 3: Assembly of Alignments into Full-Length Transcripts and Expression Quantification
 
 **SAM alignment output from HISAT2 should have already been sorted and converted to BAM with SAMtools.**
 
