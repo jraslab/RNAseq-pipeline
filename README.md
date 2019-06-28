@@ -421,13 +421,6 @@ stringtie [options] aligned_reads.bam
 1. R
 2. Ballgown
 
-The next step of the pipeline involves taking the data tables outputted by StringTie and analyzing them using **Ballgown**
-
-Workflow Steps:
-
-1. Make a text file of phenotypic data
-2.
-
 ***
 # STEP 5: Visualization of Data
 
