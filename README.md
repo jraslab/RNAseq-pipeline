@@ -552,7 +552,7 @@ The following command will filter out genes that have zero expression across all
 bg_object_filt = exprfilter(bg_object, cutoff=0)
 ```
 
-### Identify *genes* that are significantly differentially expressed
+### Identify *Genes* that are Significantly Differentially Expressed
 
 Run the following command to find genes that are differentially expressed between certain variables.
 
@@ -580,9 +580,9 @@ To go from *decreasing* p-values:
 dif_transcripts = arrange(dif_transcripts, desc(pval))
 ```
 
-### Write the data to an external output file
+### Write the Data to an External Output File
 
-*The file will be written to the directory that the R session was started in*
+***The file will be written to the directory that the R session was started in***
 
 ```
 write.csv(dif_genes, "dif_genes.csv")
@@ -612,11 +612,3 @@ tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
 palette(tropical)
 ```
 ***
-
-
-
-
-
-
-
-
