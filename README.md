@@ -16,7 +16,7 @@ Within this repository, you will find software and methods for completing the ab
 2. Assembly of alignments into full-length transcripts
 3. Quantification of gene and transcript expression levels. Export in a Ballgown readable format
 4. Calculation of differential gene and transcript expression across different experimental conditions
-5. Visualization of Data
+5. Visualization of data and differential expression analysis
 
 ## Software Necessary
 
@@ -36,11 +36,13 @@ Within this repository, you will find software and methods for completing the ab
 	- Accomplishes steps 2 and 3
 * [gffcompare](http://ccb.jhu.edu/software/stringtie/gff.shtml#gffcompare)
 * [R](https://www.r-project.org)
-	- Data visualization. Required to use Ballgown
+	- Data visualization
+	- Required to use Ballgown
 	* Packages Necessary:
 		- devtools
 		- [Ballgown](https://github.com/alyssafrazee/ballgown)
 			- Accomplishes step 4
+			- Link to [documentation](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf)
 		- [RSkittleBrewer](https://github.com/alyssafrazee/RSkittleBrewer)
 		- genefilter
 		- dplyr
@@ -417,17 +419,53 @@ stringtie [options] aligned_reads.bam
 
 # STEP 4: Calculation of Differential Gene / Transcript Expression Across Different Experimental Conditions
 
+This step takes the formatted abundance data from StringTie and analyzes it using **Ballgown**. Ballgown is a versatile tool that is used to bridge upstream software and downstream analysis with R.
+
 ## Software Used:
 1. R
 2. Ballgown
+
+### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
+
+## Input Data:
+
+Ballgown requires Three types of information:
+1. Phenotype data
+	- This includes phenotypic information about the samples being analyzed. This includes information such as genotype, celltype, etc
+2. Expression data
+	- This information is the abundance output from StringTie; it includes exon, junction, transcript, and gene expression levels
+3. Genomic information
+	- This is annotation information such as gene names and coordinate information about exons, introns, transcripts, and genes
 
 
 ***
 # STEP 5: Visualization of Data
 
+After completing statistical analysis of the abundance data, we are able to visualize the data using **Ballgown** and various packages in **R**.
+
+## Software Used:
+1. R
+2. Ballgown
+
+### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
+
+Below is a set of commands that will load all the necessary packages that are necessary for 
+
+This is an optional modification, but allows our plots to have nice color palette different from the default. This palette is taken from the aforementioned [Nature Protocol](https://www.nature.com/articles/nprot.2016.095).
+
+```
+tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
+
+palette(tropical)
+```
+
+
+***
 
 
 
-# Amazon Web Services (AWS) Setup
+
+
+
 
 
