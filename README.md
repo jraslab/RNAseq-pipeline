@@ -546,9 +546,52 @@ To create the actual Ballgown object, run the following command:
 ```
 bg_object = ballgown(dataDir = "ballgownObject02", samplePattern = "epi", pData = pheno_data)
 ```
+The following command will filter out genes that have zero expression across all samples:
+
+```
+bg_object_filt = exprfilter(bg_object, cutoff=0)
+```
+
+### Identify *genes* that are significantly differentially expressed
+
+Run the following command to find genes that are differentially expressed between certain variables.
+
+```
+dif_genes = stattest(bg_object_filt, feature = "gene", covariate = "genotype", getFC = TRUE, meas = "FPKM"
+```
+Here, `covariate` is the variable that is different between the samples. Genes would be differentially expressed due to this variable
+
+**NOTE:** 
+- We can correct for variation in expression due to other variables we want to control with the `adjustvars` option
+- We can look for differentially expressed *transcripts* by changing `feature = "gene"` to `feature = "transcripts"`
+- Load the gene names and gene IDs into the transcript data frame with the following command
+
+```
+dif_transcripts = data.frame(geneNames = ballgown::geneNames(bg_object_filt), geneIDs = ballgown::geneIDs(bg_object_filt), dif_transcripts
+```
+The `arrange` function can be used to sort the data frames. For example, by *increasing* p-values:
+
+```
+dif_genes = arrange(dif_genes, pval)
+```
+To go from *decreasing* p-values:
+
+```
+dif_transcripts = arrange(dif_transcripts, desc(pval))
+```
+
+### Write the data to an external output file
+
+*The file will be written to the directory that the R session was started in*
+
+```
+write.csv(dif_genes, "dif_genes.csv")
+write.csv(dif_transcripts, "dif_transcripts.csv")
+```
+
+Setting the `row.names` option to `FALSE` will omit the header names from the output file
 
 ***
-
 
 # STEP 5: Visualization of Data
 
