@@ -383,6 +383,51 @@ The next step of the pipeline involves the assembly of the read alignments outpu
 
 ### Any additional information and option descriptions can be found in the [StringTie](https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual) manual.
 
+## General Usage:
+
+```
+stringtie [options] aligned_reads.bam
+```
+**Options that are particularly useful**
+
+* `-G <ref_anno_file>` : Specifies the reference annotation file (`GTF` or `GFF3` format) used to guide the transcript assembly. Required by options `-e, -B/-b, -C`
+* `-o </path/out.gtf>` : Specifies the name of the output `GTF` file. Can be inputted as a path, directories will be created as needed
+* `-e` : Limits transcripts estimated and outputted to only the ones matching the annotation file passed to option `-G`
+* `-B` and `-b <path>` : Switches output to be _Ballgown_ input tables. `-b <path>` will output the data into the specified path/directory instead of the directory specified in the `-o` option
+* `-p <int>` : Specifies the number of processing threads to use for transcript assembly
+
+### Output Directory Information:
+
+When specifiying the output directory, it is important to set up the directories in a convienent way for downstream analysis with Ballgown.
+
+- You will need a `dataDir` directory that will be the home to all the samples for a *each specific* Ballgown object
+- Each sample needs a directory within the `dataDir` directory. This will hold the five output tables from StringTie.
+- The sample directory names should have a differntiating `String` of characters that will be used for the `samplePattern` variable in Ballgown later on. 
+
+Example 01 : `dataDir = ballgownObject01/` and `samplePattern = sample`
+```
+ballgownObject01/
+	sample1/
+		...
+	sample2/
+		...
+	sample3/
+		...
+
+```
+Example 02: `dataDir = ballgownObject02/` `samplePattern = epi`
+	
+```
+ballgownObject02/
+	epimu01/
+		...	
+	epimu02/
+		...
+	epiwt01/
+		...
+	epiwt02/
+		...
+```
 
 ## Workflow Options:
 
@@ -402,23 +447,18 @@ This workflow is a simplified, quicker version in which there is no interest in 
 1. Run StringTie with the `-e`, `-B/-b` and `-G` option for each sample BAM file. The `-G` option will take the Reference Genome Annotation `.gtf` file, **NOT** the merged transcript file. ( You would not have generated this anyway with this workflow ).
 2. The output can now be read in by Ballgown for generating plots, differential expression analysis, etc.
 
-## General Usage:
 
-```
-stringtie [options] aligned_reads.bam
-```
-**Options that are particularly useful**
 
-* `-G <ref_anno_file>` : Specifies the reference annotation file (`GTF` or `GFF3` format) used to guide the transcript assembly. Required by options `-e, -B/-b, -C`
-* `-o </path/out.gtf>` : Specifies the name of the output `GTF` file. Can be inputted as a path, directories will be created if needed
-* `-e` : Limits transcripts estimated and outputted to only the ones matching the annotation file passed to option `-G`
-* `-B` and `-b <path>` : Switches output to be _Ballgown_ input tables. `-b <path>` will output the data into the specified path/directory instead of the directory specified in the `-o` option
-* `-p <int>` : Specifies the number of processing threads to use for transcript assembly
 
 ***
 
 # STEP 4: Calculation of Differential Gene / Transcript Expression Across Different Experimental Conditions
 
+**All commands are for use in R, which can be started by typing the following in the Unix terminal:**
+
+```
+R
+```
 This step takes the formatted abundance data from StringTie and analyzes it using **Ballgown**. Ballgown is a versatile tool that is used to bridge upstream software and downstream analysis with R.
 
 ## Software Used:
@@ -437,6 +477,37 @@ Ballgown requires Three types of information:
 3. Genomic information
 	- This is annotation information such as gene names and coordinate information about exons, introns, transcripts, and genes
 
+Below is a set of commands that will load all the necessary packages that are necessary for 
+
+```
+library(ballgown)
+library(RSkittleBrewer)
+library(genefilter)
+library(dplyr)
+library(devtools)
+
+```
+
+### Creating the Phenotype Data file
+
+**NOTE:** You will need a separate phenotype data file for *each* Ballgown object you wish to create.
+
+Before analyzing the sample abundance data in Ballgown, you will have to create a phenotype data file to describe the samples, formatted as a `.csv` (comma-separated values) file.
+
+This file is meant to contain information about the RNA-seq samples that will be used to differentiate and compare samples from one another in statistical analysis on the ballgown object.
+
+#### Format:
+
+- Each row should describe **one** sample
+- Each column should describe **one** variable
+- the sample ids should match the names of the sample files in the directories created by StringTie
+
+Below is an example of a phenotype data file using Example02 from [STEP 2 & 3 >> Output Directory Information]()
+
+
+
+
+
 
 ***
 # STEP 5: Visualization of Data
@@ -449,7 +520,6 @@ After completing statistical analysis of the abundance data, we are able to visu
 
 ### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
 
-Below is a set of commands that will load all the necessary packages that are necessary for 
 
 This is an optional modification, but allows our plots to have nice color palette different from the default. This palette is taken from the aforementioned [Nature Protocol](https://www.nature.com/articles/nprot.2016.095).
 
@@ -458,7 +528,6 @@ tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
 
 palette(tropical)
 ```
-
 
 ***
 
