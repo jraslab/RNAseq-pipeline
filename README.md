@@ -549,6 +549,7 @@ bg_object = ballgown(dataDir = "ballgownObject02", samplePattern = "epi", pData 
 
 ***
 
+
 # STEP 5: Visualization of Data
 
 After completing statistical analysis of the abundance data, we are able to visualize the data using **Ballgown** and various packages in **R**.
