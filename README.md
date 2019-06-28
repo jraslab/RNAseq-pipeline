@@ -569,12 +569,12 @@ Here, `covariate` is the variable that is different between the samples. Genes w
 ```
 dif_transcripts = data.frame(geneNames = ballgown::geneNames(bg_object_filt), geneIDs = ballgown::geneIDs(bg_object_filt), dif_transcripts
 ```
-The `arrange` function can be used to sort the data frames. For example, by increasing p-values:
+The `arrange` function can be used to sort the data frames. For example, by *increasing* p-values:
 
 ```
 dif_genes = arrange(dif_genes, pval)
 ```
-To go from *descending* pval:
+To go from *decreasing* p-values:
 
 ```
 dif_transcripts = arrange(dif_transcripts, desc(pval))
