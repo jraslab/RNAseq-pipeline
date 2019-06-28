@@ -415,15 +415,6 @@ stringtie [options] aligned_reads.bam
 
 ***
 
-# STEP 4: Calculation of Differential Gene / Transcript Expression Across Different Experimental Conditions
-
-## Software Used:
-1. R
-2. Ballgown
-
-***
-# STEP 5: Visualization of Data
-
 
 
 
