@@ -567,7 +567,6 @@ tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
 
 palette(tropical)
 ```
-
 ***
 
 
