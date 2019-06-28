@@ -398,27 +398,16 @@ stringtie [options] aligned_reads.bam
 
 ### Output Directory Information:
 
-When specifiying the output directory, it is important to set up the directories in a convienent way for downstream analysis with Ballgown.
+When specifying the output directory, it is important to set up the directories in a convenient way for downstream analysis with Ballgown.
 
-- You will need a `dataDir` directory that will be the home to all the samples for a *each specific* Ballgown object
+- You will need a `dataDir` directory that will be the parent directory home to all the samples for *each specific* Ballgown object
 - Each sample needs a directory within the `dataDir` directory. This will hold the five output tables from StringTie.
-- The sample directory names should have a differntiating `String` of characters that will be used for the `samplePattern` variable in Ballgown later on. 
+- The sample directory names should have a differentiating string of characters that will be used for the `samplePattern` variable in Ballgown later on. 
 
-Example 01 : `dataDir = ballgownObject01/` and `samplePattern = sample`
-```
-ballgownObject01/
-	sample1/
-		...
-	sample2/
-		...
-	sample3/
-		...
-
-```
-Example 02: `dataDir = ballgownObject02/` `samplePattern = epi`
+Example 01: `dataDir = ballgownObject02/` `samplePattern = epi`
 	
 ```
-ballgownObject02/
+ballgownObject01/
 	epimu01/
 		...	
 	epimu02/
@@ -428,10 +417,21 @@ ballgownObject02/
 	epiwt02/
 		...
 ```
+Example 02 : `dataDir = ballgownObject01/` and `samplePattern = sample`
+```
+ballgownObject02/
+	sample1/
+		...
+	sample2/
+		...
+	sample3/
+		...
+
+```
 
 ## Workflow Options:
 
-Because StringTie has the ability to discover and assembly novel transcripts not present in the refrence annotation, there are two workflow options that are primarily followed when using StringTie. The difference lies in the goal of the RNAseq project and whether novel isoforms are of interest:
+Because StringTie has the ability to discover and assembly novel transcripts not present in the reference annotation, there are two workflow options that are primarily followed when using StringTie. The difference lies in the goal of the RNAseq project and whether novel isoforms are of interest:
 
 ### Option 1:
 
@@ -444,21 +444,20 @@ Because StringTie has the ability to discover and assembly novel transcripts not
 
 This workflow is a simplified, quicker version in which there is no interest in novel isoforms. This workflow **does not** individually assembly each sample's transcript and then merge them. This workflow estimates and analyzes expression based on only the transcripts that are found in the reference genome annotation.
 
-1. Run StringTie with the `-e`, `-B/-b` and `-G` option for each sample BAM file. The `-G` option will take the Reference Genome Annotation `.gtf` file, **NOT** the merged transcript file. ( You would not have generated this anyway with this workflow ).
+1. Run StringTie with the `-e`, `-B/-b` and `-G` option for each sample BAM file. The `-G` option will take the Reference Genome Annotation `.gtf` file, **NOT** the merged transcript file. (You would not have generated this anyway with this workflow).
 2. The output can now be read in by Ballgown for generating plots, differential expression analysis, etc.
-
-
-
 
 ***
 
 # STEP 4: Calculation of Differential Gene / Transcript Expression Across Different Experimental Conditions
 
-**All commands are for use in R, which can be started by typing the following in the Unix terminal:**
+**All commands are for use in R (unless an example is specified), which can be started by typing the following in the Unix terminal:**
 
 ```
 R
 ```
+**NOTE** It is convenient to start the R session in the directory that contains the phenotype data file
+
 This step takes the formatted abundance data from StringTie and analyzes it using **Ballgown**. Ballgown is a versatile tool that is used to bridge upstream software and downstream analysis with R.
 
 ## Software Used:
@@ -466,6 +465,8 @@ This step takes the formatted abundance data from StringTie and analyzes it usin
 2. Ballgown
 
 ### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
+
+**NOTE:** We will use [Example01](https://github.com/jraslab/RNAseq-pipeline#output-directory-information) from *STEP 2 & 3 >> Output Directory Information* above throughout as a base for examples.
 
 ## Input Data:
 
@@ -485,14 +486,13 @@ library(RSkittleBrewer)
 library(genefilter)
 library(dplyr)
 library(devtools)
-
 ```
 
-### Creating the Phenotype Data file
+### Creating and Reading in the Phenotype Data file
 
 **NOTE:** You will need a separate phenotype data file for *each* Ballgown object you wish to create.
 
-Before analyzing the sample abundance data in Ballgown, you will have to create a phenotype data file to describe the samples, formatted as a `.csv` (comma-separated values) file.
+Before analyzing the sample abundance data in Ballgown, you will have to create a phenotype data file to describe the samples, formatted and saved as a `.csv` (comma-separated values) file. It is convenient to save the .csv file in the `dataDir` directory.
 
 This file is meant to contain information about the RNA-seq samples that will be used to differentiate and compare samples from one another in statistical analysis on the ballgown object.
 
@@ -502,14 +502,53 @@ This file is meant to contain information about the RNA-seq samples that will be
 - Each column should describe **one** variable
 - the sample ids should match the names of the sample files in the directories created by StringTie
 
-Below is an example of a phenotype data file using Example02 from [STEP 2 & 3 >> Output Directory Information]()
+Below is an example of a phenotype data file using Example01:
 
+```
+"ids", "celltype", "genotype"
+"epimu01", "epidermis", "mutant"
+"epimu02", "epidermis", "mutant"
+"epiwt01", "epidermis", "wildtype"
+"epiwt02", "epidermis", "wildtype"
+```
+Run the following command to read the file into Ballgown:
+```
+pheno_data = read.csv("pheno_data.csv")
+```
+- The parameter can be a path to the file 
 
+**NOTE:** It is important that the sample ids in your phenotype data file...
+	1. match the sample directory names
+	2. are in the **same order** as the sample directories are in the `dataDir` directory.
 
+You can check file names match with the following command, where pheno_data is the variable you read your phenotype data into and dataDir is the `dataDir` directory mentioned earlier
 
+```
+all(pheno_data$ids == list.files("dataDir"))
+```
+### Creating the Ballgown Object
 
+The Ballgown package takes three parameters to read in expression data with the `ballgown` command.
+
+1. `dataDir`
+	- The parent directory where the data is stored
+	- In this case, `dataDir = ballgownObject02`
+	- `dataDir` can be specified as a full path to the directory, in case the R session was started in a directory not containing `dataDir`
+2. `samplePattern`
+	- A pattern that is present in the sample names used to specify which subfolders are to be included in the ballgown object
+	- In this case, `samplePattern = epi`
+3. `pData` 
+	- The variable containing the phenotypic information previously loaded into Ballgown
+	- In this case, `pData = pheno_data`
+
+To create the actual Ballgown object, run the following command:
+
+```
+bg_object = ballgown(dataDir = "ballgownObject02", samplePattern = "epi", pData = pheno_data)
+```
 
 ***
+
 # STEP 5: Visualization of Data
 
 After completing statistical analysis of the abundance data, we are able to visualize the data using **Ballgown** and various packages in **R**.
@@ -521,7 +560,7 @@ After completing statistical analysis of the abundance data, we are able to visu
 ### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
 
 
-This is an optional modification, but allows our plots to have nice color palette different from the default. This palette is taken from the aforementioned [Nature Protocol](https://www.nature.com/articles/nprot.2016.095).
+This is an optional step but allows our plots to have nice color palette different from the default. This palette is taken from the aforementioned [Nature Protocol](https://www.nature.com/articles/nprot.2016.095).
 
 ```
 tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
