@@ -456,7 +456,7 @@ This workflow is a simplified, quicker version in which there is no interest in 
 ```
 R
 ```
-**NOTE** It is convenient to start the R session in the directory that contains the phenotype data file
+**NOTE:** It is convenient to start the R session in the directory that contains the phenotype data file
 
 This step takes the formatted abundance data from StringTie and analyzes it using **Ballgown**. Ballgown is a versatile tool that is used to bridge upstream software and downstream analysis with R.
 
