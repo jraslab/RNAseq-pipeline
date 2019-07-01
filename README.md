@@ -315,6 +315,10 @@ multiqc /path/to/directory1/ /path/to/directory2/
 
 * `-x/--ignore <string>` : Specifies the string used to match to files, paths, and directories to ignore. This can be specified multiple times.
 
+## Correlation Test Between Sample Replicates
+
+Refer to [this section](https://github.com/jraslab/RNAseq-pipeline#visualizing-correlation-matrix-between-sample-replicates) for a tutorial on how to check the variation between sample replicates.
+
 ***
 
 # STEP 1: Alignment to a Known Reference Genome
@@ -664,20 +668,29 @@ palette(tropical)
 
 ## Useful Types of Visualization
 
-Below are tutorials on certain data visualizations we have found to be the most helpful and informative
+Below are tutorials on certain data visualizations we have found to be the most helpful and informative.
 
 ### Visualizing Correlation Matrix Between Sample Replicates
+
+This method can be used as a reality check to check the consistency and correlation between your sample replicates. This is a form of quality control to make sure that your sample replicates do not have too much variation.
 
 #### Software Used
 1. Ballgown
 2. corrplot
 3. PerformanceAnalytics
 
-Before visualizing the correlation matrix, we will need to create the matrix first. For example, we will be using the data given by the function `gexpr()` from the Ballgown package.
+Before visualizing the correlation matrix, we will need to create the matrix first. For example, we will be using the data given by the function `gexpr(x)` from the Ballgown package.
 
+#### Overview of Workflow
 1. Create a Ballgown object containing all sample replicates for a given experimental condition
+2. Run `gexpr(x)` on the Ballgown object to get per sample, per gene abundance levels
+3. Create a correlation matrix with the `cor()` function from R
+4. Use corrplot to create a visual representation of the correlation matrix
+5. Use PerformanceAnalytics to create scatterplots of the correlation matrix data
 
-##### Using corrplot
+
+
+#### Using corrplot
 
 Load the package:
 
@@ -685,8 +698,7 @@ Load the package:
 library(corrplot)
 ```
 
-
-##### Using PerformanceAnalytics
+#### Using PerformanceAnalytics
 
 Load the package:
 
