@@ -684,7 +684,7 @@ Load the package:
 ```
 library(corrplot)
 ```
-***
+
 
 ##### Using PerformanceAnalytics
 
