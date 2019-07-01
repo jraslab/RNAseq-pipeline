@@ -664,7 +664,7 @@ palette(tropical)
 
 ## Useful Types of Visualization
 
-Below are tutorials on certain data visualations we have found to be the most helpful and informative
+Below are tutorials on certain data visualizations we have found to be the most helpful and informative
 
 ### Visualizing Correlation Matrix Between Sample Replicates
 
