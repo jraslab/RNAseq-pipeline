@@ -5,7 +5,7 @@ This repository follows the protocol outlined in [Nature Journal](https://www.na
 Within this repository, you will find software and methods for completing the above task.
 
 ## Overview of Steps
-### Quality Control:
+### Pre-Alignment Steps:
 
 1. Demultiplex sequencing data to group by sample 
 2. Perform quality control check on raw RNA read data
@@ -48,6 +48,7 @@ Within this repository, you will find software and methods for completing the ab
 		- dplyr
 		- ggpubr
 		- corrplot
+		- PerformanceAnalytics
 ***
 
 # Software Installation and Setup
@@ -180,7 +181,7 @@ sudo apt install build-essential
 To verify that installation was successful, run `R --version`
 
 #### devtools
-Install dependencies for devtools and start an R session as a root user
+Install dependencies for devtools and **start an R session as a root user**
 ```
 sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
 
@@ -190,6 +191,9 @@ Install devtools in R Session
 ```
 install.packages('devtools')
 ```
+
+**The following installation commands assume the user is in an R session**
+
 #### Ballgown
 ```
 source("http://bioconductor.org/biocLite.R")
@@ -212,11 +216,54 @@ Or, from CRAN:
 ```
 install.packages("ggpubr")
 ```
-
 #### corrplot
 ```
 install.packages("corrplot")
 ```
+#### PerformanceAnalytics
+```
+install.packages("PerformanceAnalytics")
+```
+
+***
+
+# Demultiplexing to Sort by Sample
+
+This step may be optional depending on the starting point of your data. If your data is currently **NOT** organized by sample condition, this step is necessary. This package also converts `.qseq` files to `.fastq` files; this can be useful for downstream analysis.
+
+## Software Used:
+1. Demultiplexer
+
+**Requires Python 3.4 or greater**
+
+### Any additional information and option descriptions can be found on the [Demultiplexer](https://github.com/NuttyLogic/Demultiplexer) GitHub. There are also numerous examples to reference.
+
+## General Usage:
+
+```
+python3 Demultiplex.py -D /path/to/data/directory/ -S /path/to/sample_key_file.txt -L file_type_labels -I list_of_input_files -O /path/to/output/directory/
+```
+
+**Option Descriptions**
+
+* `-D </path/to/data/directory/` : Specifies the directory where the input files are stored
+* `-S </path/to/saple_key_file.txt>` : File holds information about the barcode for each sample
+* `-L input_file_labels` : String of `r` and `b` characters labeling input files as either read or barcode files. Should be in the same order as input files. Example: br
+* `-I list_of_input_files` : List of qseq files with the prefix and suffix separated by a `^` character. Example: s_1_1_^.qseq.txt s_1_2_^.qseq.txt. The ^ replaces the file number, considering all files with the specified prefixes and suffixes. This is similar to the use of `*` in bash.
+* `-O </path/to/output/directory/>` : Specifies the directory to write the output to
+
+### Sample Key Formatting:
+
+#### Single Index:
+```
+barcode \tab sample_name
+```
+
+#### Dual Index:
+```
+barcode \tab barcode \tab sample_name
+```
+***
 
 # STEP 0: Quality Control
 
@@ -598,11 +645,14 @@ Setting the `row.names` option to `FALSE` will omit the header names from the ou
 After completing statistical analysis of the abundance data, we are able to visualize the data using **Ballgown** and various packages in **R**.
 
 ## Software Used:
-1. R
+1. R Packages
 2. Ballgown
 
 ### Any additional information and option descriptions can be found in the [Ballgown](https://www.bioconductor.org/packages/devel/bioc/manuals/ballgown/man/ballgown.pdf) and [R](https://www.r-project.org) documentations.
 
+### The GitHub for [Ballgown](https://github.com/alyssafrazee/ballgown) provides figures and detailed instructions for visualizing data under many conditions
+
+## Setting the Color Palette
 
 This is an optional step but allows our plots to have nice color palette different from the default. This palette is taken from the aforementioned [Nature Protocol](https://www.nature.com/articles/nprot.2016.095).
 
@@ -611,4 +661,35 @@ tropical = c('darkorange', 'dodgerblue', 'hotpink', 'limegreen', 'yellow')
 
 palette(tropical)
 ```
+
+## Useful Types of Visualization
+
+Below are tutorials on certain data visualations we have found to be the most helpful and informative
+
+### Visualizing Correlation Matrix Between Sample Replicates
+
+#### Software Used
+1. Ballgown
+2. corrplot
+3. PerformanceAnalytics
+
+Before visualizing the correlation matrix, we will need to create the matrix first. For example, we will be using the data given by the function `gexpr()` from the Ballgown package.
+
+1. Create a Ballgown object containing all sample replicates for a given experimental condition
+
+##### Using corrplot
+
+Load the package:
+
+```
+library(corrplot)
+```
 ***
+
+##### Using PerformanceAnalytics
+
+Load the package:
+
+```
+library("PerformanceAnalytics")
+```
