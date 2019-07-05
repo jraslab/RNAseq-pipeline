@@ -674,6 +674,8 @@ Below are tutorials on certain data visualizations we have found to be the most 
 
 This method can be used as a reality check to check the consistency and correlation between your sample replicates. This is a form of quality control to make sure that your sample replicates do not have too much variation.
 
+*These commands are meant to be run in an R session*
+
 #### Software Used
 1. Ballgown
 2. corrplot
@@ -688,9 +690,50 @@ Before visualizing the correlation matrix, we will need to create the matrix fir
 4. Use corrplot to create a visual representation of the correlation matrix
 5. Use PerformanceAnalytics to create scatterplots of the correlation matrix data
 
+#### Step 1: Creating the Ballgown Object
+
+We will be making *one* Ballgown Object of all the sample replicates of *one* setup. This means you will need to create a `dataDir` directory holding just the sample replicates. The `samplePattern` may be different from the instructions in STEP 4 of the protocol. You will also have another phenotypic data file for the sample replicates.
+
+The format for the correct command is below:
+```
+bg_object = bg_object = ballgown(dataDir, samplePattern, pData )
+```
+
+We will then need to filter out all low abundance genes (FPKM = 0 across all samples):
+```
+bg_object_filt = exprfilter(bg_object, cutoff = 0);
+```
+
+Get the gene expression levels for the remaining genes:
+```
+object_gexpr = gexpr(bg_object_filt)
+```
+
+Normalize the FPKM values with a logarithmic transformation:
+```
+object_gexpr_log = log2(object_gexpr + 1)
+```
+#### Step 2: Creating the Matrix
+We will be using the R function `cor()` to calculate the correlation matrix. The format of the function is as follows:
+
+```
+cor(x, method = c("pearson", "kendall", "spearman"))
+```
+The default method, and the one we will use is the *pearson* option
+
+Create the correlation matrix:
+
+```
+corr = cor(object_gexpr_log)
+```
+
+Optional step to round the matrix entries to two decimal points: 
+```
+round(corr, 2)
+```
 
 
-#### Using corrplot
+#### Step 3: Using corrplot
 
 Load the package:
 
@@ -698,7 +741,7 @@ Load the package:
 library(corrplot)
 ```
 
-#### Using PerformanceAnalytics
+#### Step 4: Using PerformanceAnalytics
 
 Load the package:
 
