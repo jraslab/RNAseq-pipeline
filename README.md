@@ -47,7 +47,7 @@ Within this repository, you will find software and methods for completing the ab
 		- genefilter
 		- dplyr
 		- ggpubr
-		- corrplot
+		- [corrplot](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)
 		- PerformanceAnalytics
 ***
 
@@ -732,14 +732,21 @@ Optional step to round the matrix entries to two decimal points:
 round(corr, 2)
 ```
 
+#### Step 3: Using corrplot to make a correlogram
 
-#### Step 3: Using corrplot
+**For more detailed descriptions about options and examples with figures, please refer to the documentation for [corrplot](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html)**
 
 Load the package:
-
 ```
 library(corrplot)
 ```
+
+corrplot uses the following syntax:
+
+```
+corrplot(corr)
+```
+
 
 #### Step 4: Using PerformanceAnalytics
 
